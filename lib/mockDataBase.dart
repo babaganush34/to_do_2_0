@@ -1,28 +1,11 @@
 import 'package:todo_app_01f/toDo.dart';
 
 class MockDataBase {
-  final List<ToDo> _items = [
-    ToDo(
-      id: 1,
-      title: "Купить продукты",
-      isFinished: false,
-      date: DateTime.now().toString(),
-    ),
-    ToDo(
-      id: 2,
-      title: "Прочитать книгу",
-      isFinished: false,
-      date: DateTime.now().toString(),
-    ),
-    ToDo(
-      id: 3,
-      title: "Пойти на тренировку",
-      isFinished: false,
-      date: DateTime.now().toString(),
-    ),
+  static final List<ToDo> _items = [
+    ToDo(id: 1, title: "Купить продукты", isFinished: false, date: "2024-05-20"),
   ];
 
-  int _nextId = 4;
+  int _nextId = 2;
 
   Future<ToDo> add(String title, String date) async {
     final todo = ToDo(
@@ -31,11 +14,12 @@ class MockDataBase {
       isFinished: false,
       date: date,
     );
+    _items.add(todo);
     return todo;
   }
 
   Future<List<ToDo>> getList() async {
-    return List.unmodifiable(_items);
+    return List.from(_items);
   }
 
   Future<ToDo> updateTodo(int id, ToDo updatedTodo) async {

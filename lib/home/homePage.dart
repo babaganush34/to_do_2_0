@@ -51,7 +51,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   subtitle: Text(todo.date),
                   trailing: IconButton(
                     icon: Icon(
-                      todo.isFinished ? Icons.check_box : Icons.check_box_outline_blank,
+                      todo.isFinished
+                          ? Icons.check_box
+                          : Icons.check_box_outline_blank,
                     ),
                     onPressed: () {
                       cubit.toggleTodoFinished(todo.id, !todo.isFinished);
@@ -63,13 +65,15 @@ class _MyHomePageState extends State<MyHomePage> {
           },
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.push(
+          onPressed: () async {
+            final bool? needUpdate = await Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => AddPage()),
+              MaterialPageRoute(builder: (context) => const AddPage()),
             );
+            if (needUpdate == true) {
+              cubit.init();
+            }
           },
-          tooltip: 'Добавить',
           child: const Icon(Icons.add),
         ),
       ),
