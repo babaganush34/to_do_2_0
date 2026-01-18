@@ -49,6 +49,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 return ListTile(
                   title: Text(todo.title),
                   subtitle: Text(todo.date),
+                  style: ListTileStyle.drawer,
+                  shape: Border.all(color: Colors.black),
                   trailing: IconButton(
                     icon: Icon(
                       todo.isFinished

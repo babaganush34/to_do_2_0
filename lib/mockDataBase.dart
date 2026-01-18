@@ -1,9 +1,7 @@
 import 'package:todo_app_01f/toDo.dart';
 
 class MockDataBase {
-  static final List<ToDo> _items = [
-    ToDo(id: 1, title: "Купить продукты", isFinished: false, date: "2024-05-20"),
-  ];
+  static final List<ToDo> _items = [];
 
   int _nextId = 2;
 
