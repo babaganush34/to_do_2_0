@@ -20,6 +20,7 @@ class HomeCubit extends Cubit<HomeState> {
     emit(state.copyWith(isLoading: true, error: null));
     try {
       final items = await vm.loadList();
+      final filteredItems = filterByDate(items);
       emit(state.copyWith(items: items, isLoading: false));
     } catch (e) {
       emit(state.copyWith(isLoading: false, error: e.toString()));
@@ -41,5 +42,8 @@ class HomeCubit extends Cubit<HomeState> {
     } catch (e) {
       emit(state.copyWith(error: e.toString()));
     }
+  }
+  List<ToDo> filterByDate(List<ToDo> items) {
+    return [...items]..sort((a, b) => b.date.compareTo(a.date));
   }
 }
