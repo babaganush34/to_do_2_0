@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'home/homePage.dart';
-import 'settings/settings_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'settings/theme_cubit.dart';

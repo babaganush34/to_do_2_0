@@ -3,7 +3,7 @@ import 'package:todo_app_01f/home/homeViewModel.dart';
 import 'package:todo_app_01f/mockDataBase.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../addPage/addPage.dart';
-import '../settings/settings_page.dart';
+import '../settings/set_theme_page.dart';
 import '../toDoRepository.dart';
 import 'homeState.dart';
 
