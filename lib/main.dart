@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:todo_app_01f/database/app_database.dart';
 import 'home/homePage.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'settings/theme_cubit.dart';
 
-void main() {
+late final AppDatabase database;
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  database = AppDatabase();
+
+
   runApp(BlocProvider(create: (_) => ThemeCubit(), child: const MyApp()));
 }
 
