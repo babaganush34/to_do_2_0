@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:todo_app_01f/addPage/addPage.dart';
 import 'package:todo_app_01f/database/app_database.dart';
 import 'package:todo_app_01f/main.dart';
 import 'package:drift/drift.dart' show Value;
+import '../settings/set_theme_page.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -31,6 +33,15 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const SetThemePage()),
+            );
+          },
+          icon: Icon(Icons.settings),
+        ),
       ),
       body: FutureBuilder<List<Todo>>(
         future: database.getTodoList(),
@@ -94,10 +105,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   tileColor: item.isFinished
                       ? Colors.grey
                       : const Color(0xFF4285F4),
-                      trailing: IconButton(
-                        icon: Icon(Icons.delete, color: Colors.red),
-                        onPressed: () => _deleteTodo(item), 
-                        ),
+                  trailing: IconButton(
+                    icon: Icon(Icons.delete, color: Colors.red),
+                    onPressed: () => _deleteTodo(item),
+                  ),
                 ),
               );
             },
@@ -116,13 +127,13 @@ class _MyHomePageState extends State<MyHomePage> {
         height: 60,
         child: ElevatedButton(
           onPressed: () async {
-            await database.insertTodo(
-              TodosCompanion.insert(
-                title: "Новая задача ${DateTime.now().second}",
-                date: DateTime.now().toString().substring(0, 16),
-              ),
+            final bool? needRefresh = await Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const AddPage()),
             );
-            setState(() {});
+            if (needRefresh == true) {
+              setState(() {});
+            }
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFF4285F4),

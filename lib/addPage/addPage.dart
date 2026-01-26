@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todo_app_01f/database/app_database.dart';
+import '../main.dart';
 import '../mockDataBase.dart';
 import '../toDoRepository.dart';
 import 'add_cubit.dart';
@@ -73,10 +75,19 @@ class _AddPageState extends State<AddPage> {
                   width: double.infinity,
                   height: 60,
                   child: ElevatedButton(
-                    onPressed: () {
-                      innerContext.read<AddCubit>().saveTask(
-                        titleController.text,
-                      );
+                    onPressed: () async {
+                      final title = titleController.text.trim();
+                      if (title.isNotEmpty) {
+                        await database.insertTodo(
+                          TodosCompanion.insert(
+                            title: title,
+                            date: DateTime.now().toString().substring(0, 16),
+                          ),
+                        );
+                        if (context.mounted) {
+                          Navigator.pop(context, true);
+                        }
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF4285F4),
