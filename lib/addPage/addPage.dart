@@ -57,7 +57,7 @@ class _AddPageState extends State<AddPage> {
                   controller: titleController,
                   decoration: InputDecoration(
                     filled: true,
-                    fillColor: const Color.fromARGB(255, 205, 205, 205),
+                    fillColor: const Color.fromARGB(255, 142, 142, 142),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
                       borderSide: BorderSide(color: Colors.black),
