@@ -26,7 +26,15 @@ class _DetailPage extends State<DetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Детали')),
+      appBar: AppBar(
+        title: Text('Детали'),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: Icon(Icons.delete, color: Colors.red),
+          ),
+        ],
+      ),
       body: Padding(
         padding: EdgeInsets.all(16),
         child: Flex(
@@ -35,11 +43,24 @@ class _DetailPage extends State<DetailPage> {
             TextField(
               controller: _controller,
               decoration: InputDecoration(
-                labelText: 'Название',
-                border: OutlineInputBorder(),
+                filled: true,
+                fillColor: const Color.fromARGB(255, 142, 142, 142),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  borderSide: BorderSide(color: Colors.black),
+                ),
+                hint: Text('введите название задачи'),
               ),
             ),
+            SizedBox(height: 600),
             TextButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF4285F4),
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+              ),
               onPressed: () async {
                 final text = _controller.text.trim();
                 if (text.isNotEmpty) {
@@ -54,11 +75,58 @@ class _DetailPage extends State<DetailPage> {
                   setState(() {});
                 }
               },
-              child: const Text("Сохранить"),
+              child: const Text(
+                "Сохранить",
+                style: TextStyle(color: Colors.white),
+              ),
             ),
-            TextButton(onPressed: () => (), child: Text("Удалить")),
           ],
         ),
+      ),
+      bottomSheet: Builder(
+        builder: (innerContext) {
+          return Padding(
+            padding: const EdgeInsets.all(20),
+            child: ElevatedButton(
+              onPressed: () async {
+                final text = _controller.text.trim();
+                if (text.isNotEmpty) {
+                  await database.updateTodo(
+                    widget.todo.id,
+                    TodosCompanion(title: Value(text)),
+                  );
+                  if (mounted) {
+                    Navigator.pop(context, true);
+                    setState(() {});
+                  }
+                  setState(() {});
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF4285F4),
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(Icons.save, color: Colors.white, size: 28),
+                  SizedBox(width: 12),
+                  Text(
+                    'Сохранить',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
       ),
     );
   }

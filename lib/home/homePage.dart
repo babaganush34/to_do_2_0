@@ -5,7 +5,6 @@ import 'package:todo_app_01f/details/detail_page.dart';
 import 'package:todo_app_01f/main.dart';
 import '../settings/set_theme_page.dart';
 import 'package:drift/drift.dart' show Value;
-
 import '../toDoRepository.dart';
 import 'homeViewModel.dart';
 
@@ -123,7 +122,6 @@ class _MyHomePageState extends State<MyHomePage> {
                     icon: Icon(Icons.delete, color: Colors.red),
                     onPressed: () {
                       _deleteTodo(item);
-
                     },
                   ),
                   onTap: () async {
