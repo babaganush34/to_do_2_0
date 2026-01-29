@@ -1,5 +1,5 @@
+import 'package:todo_app_01f/database/app_database.dart';
 import 'package:todo_app_01f/toDoRepository.dart';
-import '../toDo.dart';
 import 'homeState.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -8,7 +8,11 @@ class Homeviewmodel {
 
   Homeviewmodel({required this.repo});
 
-  Future <List<ToDo>> loadList() => repo.fetchList();
+  Future<List<Todo>> loadList() => repo.fetchList();
+
+  Future<int> addTodo({required String title, required String date}) {
+    return repo.addTodo(title: title, date: date);
+  }
 }
 
 class HomeCubit extends Cubit<HomeState> {
@@ -21,7 +25,7 @@ class HomeCubit extends Cubit<HomeState> {
     try {
       final items = await vm.loadList();
       final filteredItems = filterByDate(items);
-      emit(state.copyWith(items: items, isLoading: false));
+      emit(state.copyWith(items: filteredItems, isLoading: false));
     } catch (e) {
       emit(state.copyWith(isLoading: false, error: e.toString()));
     }
@@ -31,19 +35,31 @@ class HomeCubit extends Cubit<HomeState> {
     try {
       final currentTodo = state.items.firstWhere((item) => item.id == id);
       final updatedTodo = currentTodo.copyWith(isFinished: isFinished);
-      
-      await vm.repo.updateTodo(id, updatedTodo);
-      
+
+      // await vm.repo.updateTodo(id, updatedTodo);
+
       final updatedItems = state.items.map((item) {
         return item.id == id ? updatedTodo : item;
       }).toList();
-      
+
       emit(state.copyWith(items: updatedItems));
     } catch (e) {
       emit(state.copyWith(error: e.toString()));
     }
   }
-  List<ToDo> filterByDate(List<ToDo> items) {
+
+  List<Todo> filterByDate(List<Todo> items) {
     return [...items]..sort((a, b) => b.date.compareTo(a.date));
+  }
+
+  Future<void> addTest(String title) async {
+    if (title.isEmpty) return;
+
+    try {
+      await vm.addTodo(title: title, date: DateTime.now().toString());
+      await init();
+    } catch (e) {
+      emit(state.copyWith(error: e.toString()));
+    }
   }
 }

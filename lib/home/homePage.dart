@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app_01f/addPage/addPage.dart';
 import 'package:todo_app_01f/database/app_database.dart';
+import 'package:todo_app_01f/details/detail_page.dart';
 import 'package:todo_app_01f/main.dart';
-import 'package:drift/drift.dart' show Value;
 import '../settings/set_theme_page.dart';
+import 'package:drift/drift.dart' show Value;
+
+import '../toDoRepository.dart';
+import 'homeViewModel.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -14,6 +18,16 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  late final HomeCubit cubit;
+
+  @override
+  void initState() {
+    final database = AppDatabase();
+    final repo = TodoRepositoryImpl(database);
+    final vm = Homeviewmodel(repo: repository);
+    cubit = HomeCubit(vm: vm)..init();
+  }
+
   Future<void> _toggleTodo(Todo todo) async {
     await (database.update(database.todos)..where((t) => t.id.equals(todo.id)))
         .write(TodosCompanion(isFinished: Value(!todo.isFinished)));
@@ -107,8 +121,22 @@ class _MyHomePageState extends State<MyHomePage> {
                       : const Color(0xFF4285F4),
                   trailing: IconButton(
                     icon: Icon(Icons.delete, color: Colors.red),
-                    onPressed: () => _deleteTodo(item),
+                    onPressed: () {
+                      _deleteTodo(item);
+
+                    },
                   ),
+                  onTap: () async {
+                    final bool? needRefresh = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DetailPage(todo: item),
+                      ),
+                    );
+                    if (needRefresh == true) {
+                      setState(() {});
+                    }
+                  },
                 ),
               );
             },

@@ -1,23 +1,25 @@
-import 'mockDataBase.dart';
-import 'toDo.dart';
+import 'package:todo_app_01f/database/app_database.dart';
+import 'package:todo_app_01f/database/todos.dart';
 
 abstract class TodoRepository {
-  Future<List<ToDo>> fetchList();
-  Future<ToDo> addTodo({required String title, required String date});
-  Future<ToDo> updateTodo(int id, ToDo updatedTodo);
+  Future<List<Todo>> fetchList();
+  Future<int> addTodo({required String title, required String date});
+  // Future<Todo> updateTodo(int id, Todo updatedTodo);
 }
 
 class TodoRepositoryImpl implements TodoRepository {
-  final MockDataBase db;
+  final AppDatabase db;
 
   TodoRepositoryImpl(this.db);
 
   @override
-  Future<ToDo> addTodo({required String title, required String date}) => db.add(title, date);
+  Future<int> addTodo({required String title, required String date}) =>
+      db.insertTodo(TodosCompanion.insert(title: title, date: date));
 
   @override
-  Future<List<ToDo>> fetchList() => db.getList();
+  Future<List<Todo>> fetchList() => db.getTodoList();
 
-  @override
-  Future<ToDo> updateTodo(int id, ToDo updatedTodo) => db.updateTodo(id, updatedTodo);
+  // @override
+  // Future<Todo> updateTodo(int id, Todo updatedTodo) =>
+  //     db.updateTodo(id, updatedTodo);
 }

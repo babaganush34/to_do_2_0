@@ -1,7 +1,8 @@
-import '../toDo.dart';
+
+import 'package:todo_app_01f/database/app_database.dart';
 
 class HomeState {
-  final List<ToDo> items;
+  final List<Todo> items;
   final bool isLoading;
   final String? error;
 
@@ -18,7 +19,7 @@ class HomeState {
     );
 
     HomeState copyWith({
-      List<ToDo>? items,
+      List<Todo>? items,
       bool? isLoading,
       String? error,
     }) {
