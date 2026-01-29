@@ -1,5 +1,4 @@
 import 'package:todo_app_01f/database/app_database.dart';
-import 'package:todo_app_01f/database/todos.dart';
 
 abstract class TodoRepository {
   Future<List<Todo>> fetchList();

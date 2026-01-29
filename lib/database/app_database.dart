@@ -25,7 +25,7 @@ class AppDatabase extends _$AppDatabase {
     return (update(todos)..where((t) => t.id.equals(id))).write(data);
   }
 
-  Future<int> deleteTodo(int id) {
+  Future<int> deleteTodo(int id, TodosCompanion todosCompanion) {
     return (delete(todos)..where((t) => t.id.equals(id))).go();
   }
 }

@@ -30,7 +30,20 @@ class _DetailPage extends State<DetailPage> {
         title: Text('Детали'),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () async {
+              final text = _controller.text.trim();
+              if (text.isNotEmpty) {
+                await database.deleteTodo(
+                  widget.todo.id,
+                  TodosCompanion(title: Value(text)),
+                );
+                if (mounted) {
+                  Navigator.pop(context, true);
+                  setState(() {});
+                }
+                setState(() {});
+              }
+            },
             icon: Icon(Icons.delete, color: Colors.red),
           ),
         ],
