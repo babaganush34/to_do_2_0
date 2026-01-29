@@ -33,13 +33,6 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {});
   }
 
-  Future<void> _deleteTodo(Todo todo) async {
-    await (database.delete(
-      database.todos,
-    )..where((t) => t.id.equals(todo.id))).go();
-    setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -118,12 +111,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   tileColor: item.isFinished
                       ? Colors.grey
                       : const Color(0xFF4285F4),
-                  trailing: IconButton(
-                    icon: Icon(Icons.delete, color: Colors.red),
-                    onPressed: () {
-                      _deleteTodo(item);
-                    },
-                  ),
                   onTap: () async {
                     final bool? needRefresh = await Navigator.push(
                       context,
