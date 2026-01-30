@@ -75,7 +75,7 @@ class _DetailPageState extends State<DetailPage> {
                           controller: _controller,
                           decoration: InputDecoration(
                             filled: true,
-                            fillColor: const Color.fromARGB(255, 230, 230, 230),
+                            fillColor: const Color.fromARGB(255, 142, 142, 142),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(16),
                               borderSide: const BorderSide(color: Colors.black),
@@ -104,7 +104,7 @@ class _DetailPageState extends State<DetailPage> {
                       }
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF4285F4),
+                      backgroundColor: const Color.fromARGB(255, 65, 133, 243),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15),
                       ),
