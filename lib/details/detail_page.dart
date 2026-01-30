@@ -1,7 +1,11 @@
-import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
+import 'package:todo_app_01f/details/detail_cubit.dart';
+import 'package:todo_app_01f/details/detail_view_model.dart';
 import 'package:todo_app_01f/main.dart';
 import '../database/app_database.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'detail_state.dart';
 
 class DetailPage extends StatefulWidget {
   final Todo todo;
@@ -23,123 +27,214 @@ class _DetailPage extends State<DetailPage> {
     _controller = TextEditingController(text: widget.todo.title);
   }
 
+  // @override
+  // Widget build(BuildContext context) {
+  //   return Scaffold(
+  //     appBar: AppBar(
+  //       title: Text('Детали'),
+  //       actions: [
+  //         IconButton(
+  //           onPressed: () async {
+  //             final text = _controller.text.trim();
+  //             if (text.isNotEmpty) {
+  //               await database.deleteTodo(
+  //                 widget.todo.id,
+  //                 TodosCompanion(title: Value(text)),
+  //               );
+  //               if (mounted) {
+  //                 Navigator.pop(context, true);
+  //                 setState(() {});
+  //               }
+  //               setState(() {});
+  //             }
+  //           },
+  //           icon: Icon(Icons.delete, color: Colors.red),
+  //         ),
+  //       ],
+  //     ),
+  //     body: Padding(
+  //       padding: EdgeInsets.all(16),
+  //       child: Flex(
+  //         direction: Axis.vertical,
+  //         children: [
+  //           TextField(
+  //             controller: _controller,
+  //             decoration: InputDecoration(
+  //               filled: true,
+  //               fillColor: const Color.fromARGB(255, 142, 142, 142),
+  //               border: OutlineInputBorder(
+  //                 borderRadius: BorderRadius.circular(16),
+  //                 borderSide: BorderSide(color: Colors.black),
+  //               ),
+  //               hint: Text('введите название задачи'),
+  //             ),
+  //           ),
+  //           SizedBox(height: 600),
+  //           TextButton(
+  //             style: ElevatedButton.styleFrom(
+  //               backgroundColor: const Color(0xFF4285F4),
+  //               elevation: 0,
+  //               shape: RoundedRectangleBorder(
+  //                 borderRadius: BorderRadius.circular(15),
+  //               ),
+  //             ),
+  //             onPressed: () async {
+  //               final text = _controller.text.trim();
+  //               if (text.isNotEmpty) {
+  //                 await database.updateTodo(
+  //                   widget.todo.id,
+  //                   TodosCompanion(title: Value(text)),
+  //                 );
+  //                 if (mounted) {
+  //                   Navigator.pop(context, true);
+  //                   setState(() {});
+  //                 }
+  //                 setState(() {});
+  //               }
+  //             },
+  //             child: const Text(
+  //               "Сохранить",
+  //               style: TextStyle(color: Colors.white),
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //     bottomSheet: Builder(
+  //       builder: (innerContext) {
+  //         return Padding(
+  //           padding: const EdgeInsets.all(20),
+  //           child: ElevatedButton(
+  //             onPressed: () async {
+  //               final text = _controller.text.trim();
+  //               if (text.isNotEmpty) {
+  //                 await database.updateTodo(
+  //                   widget.todo.id,
+  //                   TodosCompanion(title: Value(text)),
+  //                 );
+  //                 if (mounted) {
+  //                   Navigator.pop(context, true);
+  //                   setState(() {});
+  //                 }
+  //                 setState(() {});
+  //               }
+  //             },
+  //             style: ElevatedButton.styleFrom(
+  //               backgroundColor: const Color(0xFF4285F4),
+  //               elevation: 0,
+  //               shape: RoundedRectangleBorder(
+  //                 borderRadius: BorderRadius.circular(15),
+  //               ),
+  //             ),
+  //             child: Row(
+  //               mainAxisAlignment: MainAxisAlignment.center,
+  //               children: const [
+  //                 Icon(Icons.save, color: Colors.white, size: 28),
+  //                 SizedBox(width: 12),
+  //                 Text(
+  //                   'Сохранить',
+  //                   style: TextStyle(
+  //                     color: Colors.white,
+  //                     fontSize: 18,
+  //                     fontWeight: FontWeight.w500,
+  //                   ),
+  //                 ),
+  //               ],
+  //             ),
+  //           ),
+  //         );
+  //       },
+  //     ),
+  //   );
+  // }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Детали'),
-        actions: [
-          IconButton(
-            onPressed: () async {
-              final text = _controller.text.trim();
-              if (text.isNotEmpty) {
-                await database.deleteTodo(
-                  widget.todo.id,
-                  TodosCompanion(title: Value(text)),
-                );
-                if (mounted) {
-                  Navigator.pop(context, true);
-                  setState(() {});
-                }
-                setState(() {});
-              }
-            },
-            icon: Icon(Icons.delete, color: Colors.red),
+    return BlocProvider(
+      create: (context) => DetailCubit(vm: DetailViewModel(repo: repository)),
+      child: BlocListener<DetailCubit, DetailState>(
+        listener: (context, state) {
+          if (state is DetailSuccess) {
+            Navigator.pop(context, true);
+          }
+          if (state is DetailError) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.message)));
+          }
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text('Детали'),
+            actions: [
+              IconButton(
+                onPressed: () {
+                  context.read<DetailCubit>().deleteTodo(widget.todo.id);
+                },
+                icon: Icon(Icons.delete, color: Colors.red),
+              ),
+            ],
           ),
-        ],
-      ),
-      body: Padding(
-        padding: EdgeInsets.all(16),
-        child: Flex(
-          direction: Axis.vertical,
-          children: [
-            TextField(
-              controller: _controller,
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: const Color.fromARGB(255, 142, 142, 142),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(16),
-                  borderSide: BorderSide(color: Colors.black),
+          body: BlocBuilder<DetailCubit, DetailState>(
+            builder: (context, state) {
+              if (state is DetailLoading) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              return Padding(
+                padding: const EdgeInsets.all(20),
+                child: TextField(
+                  controller: _controller,
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: const Color.fromARGB(255, 142, 142, 142),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16),
+                      borderSide: BorderSide(color: Colors.black),
+                    ),
+                    hint: Text('введите название задачи'),
+                  ),
                 ),
-                hint: Text('введите название задачи'),
-              ),
-            ),
-            SizedBox(height: 600),
-            TextButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF4285F4),
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-              ),
-              onPressed: () async {
-                final text = _controller.text.trim();
-                if (text.isNotEmpty) {
-                  await database.updateTodo(
-                    widget.todo.id,
-                    TodosCompanion(title: Value(text)),
-                  );
-                  if (mounted) {
-                    Navigator.pop(context, true);
-                    setState(() {});
-                  }
-                  setState(() {});
-                }
-              },
-              child: const Text(
-                "Сохранить",
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-          ],
-        ),
-      ),
-      bottomSheet: Builder(
-        builder: (innerContext) {
-          return Padding(
-            padding: const EdgeInsets.all(20),
-            child: ElevatedButton(
-              onPressed: () async {
-                final text = _controller.text.trim();
-                if (text.isNotEmpty) {
-                  await database.updateTodo(
-                    widget.todo.id,
-                    TodosCompanion(title: Value(text)),
-                  );
-                  if (mounted) {
-                    Navigator.pop(context, true);
-                    setState(() {});
-                  }
-                  setState(() {});
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF4285F4),
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Icon(Icons.save, color: Colors.white, size: 28),
-                  SizedBox(width: 12),
-                  Text(
-                    'Сохранить',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
+              );
+            },
+          ),
+          bottomSheet: Builder(
+            builder: (innerContext) {
+              return Padding(
+                padding: const EdgeInsets.all(20),
+                child: ElevatedButton(
+                  onPressed: () {
+                    context.read<DetailCubit>().updateTodo(
+                      widget.todo,
+                      _controller.text.trim(),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF4285F4),
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
                     ),
                   ),
-                ],
-              ),
-            ),
-          );
-        },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Icon(Icons.save, color: Colors.white, size: 28),
+                      SizedBox(width: 12),
+                      Text(
+                        'Сохранить',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
       ),
     );
   }
