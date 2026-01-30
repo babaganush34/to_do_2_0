@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_app_01f/database/app_database.dart';
 import 'package:todo_app_01f/details/detail_cubit.dart';
 import 'package:todo_app_01f/details/detail_view_model.dart';
-import 'package:todo_app_01f/main.dart'; // чтобы видеть глобальный repository
+import 'package:todo_app_01f/main.dart';
 import 'detail_state.dart';
 
 class DetailPage extends StatefulWidget {
@@ -21,7 +21,6 @@ class _DetailPageState extends State<DetailPage> {
   @override
   void initState() {
     super.initState();
-    // Сразу подставляем текущее название задачи в поле ввода
     _controller = TextEditingController(text: widget.todo.title);
   }
 
@@ -34,15 +33,12 @@ class _DetailPageState extends State<DetailPage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      // Создаем кубит и передаем ему VM с репозиторием
       create: (context) => DetailCubit(vm: DetailViewModel(repo: repository)),
-      // Используем Builder, чтобы создать новый контекст ВНУТРИ провайдера
       child: Builder(
         builder: (context) {
           return BlocListener<DetailCubit, DetailState>(
             listener: (context, state) {
               if (state is DetailSuccess) {
-                // Возвращаемся на главный экран с пометкой "true" (нужно обновить список)
                 Navigator.pop(context, true);
               }
               if (state is DetailError) {
@@ -60,7 +56,6 @@ class _DetailPageState extends State<DetailPage> {
                 actions: [
                   IconButton(
                     onPressed: () {
-                      // Теперь этот context видит DetailCubit
                       context.read<DetailCubit>().deleteTodo(widget.todo.id);
                     },
                     icon: const Icon(Icons.delete, color: Colors.red),
@@ -69,11 +64,9 @@ class _DetailPageState extends State<DetailPage> {
               ),
               body: BlocBuilder<DetailCubit, DetailState>(
                 builder: (context, state) {
-                  // Если идет сохранение или удаление — показываем загрузку
                   if (state is DetailLoading) {
                     return const Center(child: CircularProgressIndicator());
                   }
-
                   return Padding(
                     padding: const EdgeInsets.all(20),
                     child: Column(
@@ -104,7 +97,6 @@ class _DetailPageState extends State<DetailPage> {
                     onPressed: () {
                       final title = _controller.text.trim();
                       if (title.isNotEmpty) {
-                        // Вызываем обновление
                         context.read<DetailCubit>().updateTodo(
                           widget.todo,
                           title,
