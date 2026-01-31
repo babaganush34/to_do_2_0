@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_app_01f/database/app_database.dart';
-import 'package:todo_app_01f/details/detail_cubit.dart';
-import 'package:todo_app_01f/details/detail_view_model.dart';
+import 'package:todo_app_01f/features/home_page/details/detail_cubit.dart';
+import 'package:todo_app_01f/features/home_page/details/detail_view_model.dart';
 import 'package:todo_app_01f/main.dart';
 import 'detail_state.dart';
 
