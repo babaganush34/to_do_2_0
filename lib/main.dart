@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app_01f/database/app_database.dart';
+import 'package:todo_app_01f/services/app_preferences.dart';
 import 'package:todo_app_01f/toDoRepository.dart';
-import 'home/homePage.dart';
+import 'features/home_page/home/homePage.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'settings/theme_cubit.dart';
+import 'features/settings/theme_cubit.dart';
 
 late final AppDatabase database;
 late final TodoRepository repository;
+late final AppPreferences preferences;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   database = AppDatabase();
   repository = TodoRepositoryImpl(database);
+  preferences = AppPreferences.instance;
+  await preferences.init();
 
   runApp(BlocProvider(create: (_) => ThemeCubit(), child: const MyApp()));
 }

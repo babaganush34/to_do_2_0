@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app_01f/addPage/addPage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:todo_app_01f/features/addPage/addPage.dart';
 import 'package:todo_app_01f/database/app_database.dart';
-import 'package:todo_app_01f/details/detail_page.dart';
+import 'package:todo_app_01f/features/home_page/details/detail_page.dart';
 import 'package:todo_app_01f/main.dart';
-import '../settings/set_theme_page.dart';
+import '../../settings/settings_page.dart';
 import 'package:drift/drift.dart' show Value;
-import '../toDoRepository.dart';
-import 'homeViewModel.dart';
+// import '../toDoRepository.dart';
+// import 'homeViewModel.dart';
 import 'home_cubit.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -19,13 +20,30 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   late final HomeCubit cubit;
+  late SharedPreferences prefs;
 
-  @override
-  void initState() {
-    final database = AppDatabase();
-    final repo = TodoRepositoryImpl(database);
-    final vm = Homeviewmodel(repo: repository);
-    cubit = HomeCubit(vm: vm)..init();
+  // @override
+  // void initState() {
+  //   final database = AppDatabase();
+  //   final repo = TodoRepositoryImpl(database);
+  //   final vm = Homeviewmodel(repo: repository);
+  //   cubit = HomeCubit(vm: vm)..init();
+  // }
+
+  Future<void> loadValue() async {
+    prefs = await SharedPreferences.getInstance();
+
+    prefs.getBool('isDarkTheme');
+    prefs.getInt('progress');
+    prefs.getString('username');
+  }
+
+  Future<void> setValue() async {
+    prefs = await SharedPreferences.getInstance();
+
+    prefs.setBool('isDarkTheme', false);
+    prefs.setInt('progress', 60);
+    prefs.setString('username', 'Abai');
   }
 
   Future<void> _toggleTodo(Todo todo) async {
@@ -40,15 +58,17 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
-        leading: IconButton(
+        actions: [
+          IconButton(
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (_) => const SetThemePage()),
+              MaterialPageRoute(builder: (_) => const SettingsPage()),
             );
           },
           icon: Icon(Icons.settings),
         ),
+        ],
       ),
       body: FutureBuilder<List<Todo>>(
         future: database.getTodoList(),

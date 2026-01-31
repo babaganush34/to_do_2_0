@@ -1,5 +1,5 @@
 import 'package:todo_app_01f/toDoRepository.dart';
-import '../database/app_database.dart';
+import '../../../database/app_database.dart';
 
 class DetailViewModel {
   final TodoRepository repo;

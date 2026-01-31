@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_app_01f/database/app_database.dart';
-import '../main.dart';
-import '../toDoRepository.dart';
+import '../../main.dart';
+import '../../toDoRepository.dart';
 import 'add_cubit.dart';
 import 'add_view_model.dart';
 import 'add_state.dart';

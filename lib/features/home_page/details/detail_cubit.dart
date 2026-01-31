@@ -1,7 +1,7 @@
-import 'package:todo_app_01f/details/detail_state.dart';
+import 'package:todo_app_01f/features/home_page/details/detail_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todo_app_01f/details/detail_view_model.dart';
-import '../database/app_database.dart';
+import 'package:todo_app_01f/features/home_page/details/detail_view_model.dart';
+import '../../../database/app_database.dart';
 
 class DetailCubit extends Cubit<DetailState> {
   final DetailViewModel vm;

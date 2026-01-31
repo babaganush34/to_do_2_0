@@ -1,4 +1,4 @@
-import '../database/app_database.dart';
+import '../../../database/app_database.dart';
 import 'homeState.dart';
 import 'homeViewModel.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,7 +18,6 @@ class HomeCubit extends Cubit<HomeState> {
       emit(state.copyWith(isLoading: false, error: e.toString()));
     }
   }
-
   Future<void> toggleTodoFinished(int id, bool isFinished) async {
     try {
       final currentTodo = state.items.firstWhere((item) => item.id == id);
