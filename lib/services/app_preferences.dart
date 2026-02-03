@@ -15,4 +15,12 @@ class AppPreferences {
   bool get isDarkTheme => _prefs.getBool('isDarkTheme') ?? false;
 
   Future<void> setDarkTheme(bool value) => _prefs.setBool('isDarkTheme', value);
+
+  static const _onboardingKey = 'onboarding_seen';
+
+  bool get isOnboardingSeen => _prefs.getBool(_onboardingKey) ?? false;
+
+  Future<void> setOnboardingSeen() async {
+    await _prefs.setBool(_onboardingKey, true);
+  }
 }
